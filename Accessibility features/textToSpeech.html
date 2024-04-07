@@ -18,19 +18,36 @@
         <button type="submit" id="submit-button">Read the Screen</button>
     </div>
     <script>
+        let clicked = false;
+        const synth = window.speechSynthesis;
+
         document.getElementById("submit-button").addEventListener("click", function () {
-            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
-            const synth = window.speechSynthesis;
 
-            Array.from(contentsToTranslate).forEach(content => {
-                const textInput = content.textContent;
-                const sentences = textInput.split(/[.|?|!]\s*/);
+            
+            if (!clicked) {
+                clicked = true;
+                const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
+                const synth = window.speechSynthesis;
 
-                sentences.forEach(sentence => {
-                    const utterThis = new SpeechSynthesisUtterance(sentence);
-                    synth.speak(utterThis);
+                Array.from(contentsToTranslate).forEach(content => {
+                    const textInput = content.textContent;
+                    const sentences = textInput.split(/[.|?|!]\s*/);
+
+                    sentences.forEach(sentence => {
+                        const utterThis = new SpeechSynthesisUtterance(sentence);
+                        synth.speak(utterThis);
+                    });
                 });
-            });
+
+                
+               
+            } else {
+                synth.cancel();
+                clicked = false
+                
+
+            }
+            
         });
     </script>
 </body>
