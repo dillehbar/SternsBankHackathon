@@ -304,14 +304,94 @@
                             <div class="col-xs-12">
                                 <nav class="nav-main-top nav-main-top-2023">
                                     <ul>
+                                        <li>
+                                            <select id="languageSelector">
+                                                <option value="en">English</option>
+                                                <option value="es">Spanish</option>
+                                                <option value="so">Somila</option>
+                                                <!-- Add more options for other languages as needed -->
+                                            </select>
+                                        </li>
+
+                                        <script>
+                                             // Function to translate content
+        function translateContent(targetLanguage) {
+            const apiKey = 'AIzaSyDjM7iOXyQSsPDTAFQjeU3i6Rxb-njgEtw';
+            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
+
+            const translations = [];
+
+            Array.from(contentsToTranslate).forEach(content => {
+                const textToTranslate = {
+                    q: content.getAttribute('original-text'),
+                    source: 'en', // Source language (English)
+                    target: targetLanguage // Target language
+                };
+
+                fetch(`https://translation.googleapis.com/language/translate/v2?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(textToTranslate)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        translations.push({ element: content, translation: data.data.translations[0].translatedText });
+
+                        // Check if all translations are done
+                        if (translations.length === contentsToTranslate.length) {
+                            // Update content elements with translations
+                            translations.forEach(item => {
+                                item.element.innerText = item.translation;
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error translating content:', error);
+                    });
+            });
+        }
+
+        // Detect user's language preference or default to English
+        const userLanguage = navigator.language.split('-')[0];
+        const defaultLanguage = 'en';
+        const selectedLanguage = userLanguage || defaultLanguage;
+        translateContent(selectedLanguage);
+
+        // Event listener for language selection dropdown
+        document.getElementById('languageSelector').addEventListener('change', function () {
+            const targetLanguage = this.value;
+
+            convertToEnglish();
+
+            if (targetLanguage != 'en') {
+                translateContent(targetLanguage);
+            }
+
+        });
+
+
+        function convertToEnglish() {
+            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
+            Array.from(contentsToTranslate).forEach(content => {
+                console.log(content.innerHTML);
+                content.innerHTML = content.getAttribute('original-text');
+                console.log(content.value);
+            });
+        }
+
+                                        </script>
+
+
                                         <li class="level-1">
-                                            <a class="itemToTranslate" original-text=" " class="itemToTranslate" original-text="Blog" href="https://www.stearnsbank.com/resources/blog">Blog</a>
+                                            <a class="itemToTranslate" original-text="Blog" class="itemToTranslate" original-text="Blog" href="https://www.stearnsbank.com/resources/blog">Blog</a>
                                         </li>
                                         <li class="level-1">
                                             <a class="itemToTranslate" original-text="Calculators" href="https://www.stearnsbank.com/resources/calculators">Calculators</a>
                                         </li>
                                         <li class="level-1">
-                                            <a class="itemToTranslate" original-text="Locations & ATMs" href="https://www.stearnsbank.com/locations-atms">Locationst &amp; ATMs</a>
+                                            <a class="itemToTranslate" original-text="Locations & ATMs" href="https://www.stearnsbank.com/locations-atms">Locations & ATMs</a>
                                         </li>
                                         <li class="level-1">
                                             <a class="itemToTranslate" original-text="Customer Service" href="https://www.stearnsbank.com/customer-service">Customer Service</a>
@@ -524,7 +604,7 @@
                                     </a>
                                     <ul>
                                         <li class="level-1">
-                                            <a href="https://www.stearnsbank.com/loans">Loans</a>
+                                            <a class="itemToTranslate" original-text="Loans" href="https://www.stearnsbank.com/loans">Loans</a>
                                             <div class="nav-main-dropdown-wrapper">
                                                 <div class="nav-main-dropdown">
                                                     <ul>
@@ -625,7 +705,7 @@
                                             </div>
                                         </li>
                                         <li class="level-1">
-                                            <a href="https://www.stearnsbank.com/business">Business</a>
+                                            <a class="itemToTranslate" original-text="Business" href="https://www.stearnsbank.com/business">Business</a>
                                             <div class="nav-main-dropdown-wrapper">
                                                 <div class="nav-main-dropdown">
                                                     <ul>
@@ -701,7 +781,7 @@
                                             </div>
                                         </li>
                                         <li class="level-1">
-                                            <a href="https://www.stearnsbank.com/personal">Personal</a>
+                                            <a class="itemToTranslate" original-text="Personal" href="https://www.stearnsbank.com/personal">Personal</a>
                                             <div class="nav-main-dropdown-wrapper">
                                                 <div class="nav-main-dropdown">
                                                     <ul>
@@ -759,7 +839,7 @@
                                             </div>
                                         </li>
                                         <li class="level-1">
-                                            <a href="https://www.stearnsbank.com/educationandtools">Education &amp; Tools</a>
+                                            <a class="itemToTranslate" original-text="Education & Tools" href="https://www.stearnsbank.com/educationandtools">Education &amp; Tools</a>
                                             <div class="nav-main-dropdown-wrapper">
                                                 <div class="nav-main-dropdown">
                                                     <ul>
@@ -807,7 +887,7 @@
                                             </div>
                                         </li>
                                         <li class="level-1">
-                                            <a href="https://www.stearnsbank.com/about">About</a>
+                                            <a class="itemToTranslate" original-text="About" href="https://www.stearnsbank.com/about">About</a>
                                             <div class="nav-main-dropdown-wrapper">
                                                 <div class="nav-main-dropdown">
                                                     <ul>
@@ -934,7 +1014,7 @@
                                             }
                                         </style>
                                         <!-- remove the hidden-md class when the Access Statements button is removed -->
-                                        <a id="apply-btn" href="javascript:void(0);" class="btn btn-blue apply-today-btn nav-main-login-btn">Apply Today</a>
+                                        <a class="itemToTranslate" original-text="Apply Today" id="apply-btn" href="javascript:void(0);" class="btn btn-blue apply-today-btn nav-main-login-btn" >Apply Today</a>
                                     </div>
                                 </nav>
                                 <nav class="nav-mobile hidden-md hidden-lg">
@@ -1372,7 +1452,7 @@
                 <span id="hs_cos_wrapper_main" class="hs_cos_wrapper hs_cos_wrapper_widget_container hs_cos_wrapper_type_widget_container" style="" data-hs-cos-general-type="widget_container" data-hs-cos-type="widget_container">
                     <div id="hs_cos_wrapper_widget_1689970603414" class="hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style="" data-hs-cos-general-type="widget" data-hs-cos-type="module">
                         <span id="hs_cos_wrapper_widget_1689970603414_" class="hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_rich_text" style="" data-hs-cos-general-type="widget" data-hs-cos-type="rich_text">
-                            <div style="font-size: 12px; text-align: center;">FOR YOUR SECURITY: Stearns Bank will never ask for your username, password or secure access code. We will not ask for your email to log in or transmit money via ACH or Wire; nor will we ask for your IP address or to take control of your computer or phone. If someone claiming to be from Stearns Bank contacts you, asking for the above information, hang up and call us immediately at <a href="tel:8003207262" rel="noopener">800-320-7262</a>. </div>
+                            <div class="itemToTranslate" original-text="FOR YOUR SECURITY: Stearns Bank will never ask for your username, password or secure access code. We will not ask for your email to log in or transmit money via ACH or Wire; nor will we ask for your IP address or to take control of your computer or phone. If someone claiming to be from Stearns Bank contacts you, asking for the above information, hang up and call us immediately at " style="font-size: 12px; text-align: center;">FOR YOUR SECURITY: Stearns Bank will never ask for your username, password or secure access code. We will not ask for your email to log in or transmit money via ACH or Wire; nor will we ask for your IP address or to take control of your computer or phone. If someone claiming to be from Stearns Bank contacts you, asking for the above information, hang up and call us immediately at <a href="tel:8003207262" rel="noopener">800-320-7262</a>. </div>
                         </span>
                     </div>
                     <div id="hs_cos_wrapper_widget_1695996092835" class="hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style="" data-hs-cos-general-type="widget" data-hs-cos-type="module">
@@ -1393,14 +1473,14 @@
                                 <div class="hero-content-inner">
                                     <div class="hero-content-col hero-left-col">
                                         <div class="hero-content-col-inner">
-                                            <h1>Get More from Your Business <span>Spending</span>
+                                            <h1 class="itemToTranslate" original-text="Get More from Your Business Spending">Get More from Your Business <span>Spending</span>
                                             </h1>
                                             <div class="hero-content-desc">
-                                                <h3>Find the Stearns Bank credit card that works for you.</h3>
-                                                <p>Experience the power of financial transformation with our suite of business credit cards. They offer the ability to efficiently manage expenses, seamlessly integrate with your accounting software, and boost cash flow.&nbsp;</p>
+                                                <h3 class="itemToTranslate" original-text="Find the Stearns Bank credit card that works for you.">Find the Stearns Bank credit card that works for you.</h3>
+                                                <p class="itemToTranslate" original-text="Experience the power of financial transformation with our suite of business credit cards. They offer the ability to efficiently manage expenses, seamlessly integrate with your accounting software, and boost cash flow">Experience the power of financial transformation with our suite of business credit cards. They offer the ability to efficiently manage expenses, seamlessly integrate with your accounting software, and boost cash flow.&nbsp;</p>
                                             </div>
                                             <div class="hero2023-btn">
-                                                <a class="btn btn-green" href="https://app.thecardservicescenter.com/Selection/Selection?finumber=0640" target="_blank" rel="noopener"> Apply today </a>
+                                                <a class="itemToTranslate" original-text="Apply Today" class="btn btn-green" href="https://app.thecardservicescenter.com/Selection/Selection?finumber=0640" target="_blank" rel="noopener"> Apply today</a>
                                             </div>
                                         </div>
                                     </div>
