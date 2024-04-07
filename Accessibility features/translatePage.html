@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+</head>
+<body>
+    <h1 id="title">Welcome to My Website</h1>
+    <p class="itemToTranslate" original-text="This is some sample content 1.">This is some sample content 1.</p>
+    <p class="itemToTranslate" original-text="This is some sample content 2.">This is some sample content 2.</p>
+    <p class="itemToTranslate" original-text="This is some sample content 3.">This is some sample content 3.</p>
+
+    <!-- Dropdown for language selection -->
+    <select id="languageSelector">
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+        <option value="so">Somila</option>
+        <!-- Add more options for other languages as needed -->
+    </select>
+
+    <script>
+        // Function to translate content
+        function translateContent(targetLanguage) {
+            const apiKey = 'AIzaSyDjM7iOXyQSsPDTAFQjeU3i6Rxb-njgEtw';
+            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
+
+            const translations = [];
+
+            Array.from(contentsToTranslate).forEach(content => {
+                const textToTranslate = {
+                    q: content.getAttribute('original-text'),
+                    source: 'en', // Source language (English)
+                    target: targetLanguage // Target language
+                };
+
+                fetch(`https://translation.googleapis.com/language/translate/v2?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(textToTranslate)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        translations.push({ element: content, translation: data.data.translations[0].translatedText });
+
+                        // Check if all translations are done
+                        if (translations.length === contentsToTranslate.length) {
+                            // Update content elements with translations
+                            translations.forEach(item => {
+                                item.element.innerText = item.translation;
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error translating content:', error);
+                    });
+            });
+        }
+
+        // Detect user's language preference or default to English
+        const userLanguage = navigator.language.split('-')[0];
+        const defaultLanguage = 'en';
+        const selectedLanguage = userLanguage || defaultLanguage;
+        translateContent(selectedLanguage);
+
+        // Event listener for language selection dropdown
+        document.getElementById('languageSelector').addEventListener('change', function () {
+            const targetLanguage = this.value;
+
+            convertToEnglish();
+
+            if (targetLanguage != 'en') {
+                translateContent(targetLanguage);
+            }
+
+        });
+
+
+        function convertToEnglish() {
+            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
+            Array.from(contentsToTranslate).forEach(content => {
+                console.log(content.innerHTML);
+                content.innerHTML = content.getAttribute('original-text');
+                console.log(content.value);
+            });
+        }
+    </script>
+</body>
+</html>
