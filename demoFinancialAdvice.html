@@ -326,6 +326,94 @@
                                         }
                                     </style>
 
+                                    <button type="submit" id="submit-button">Read the Screen</button>
+
+                                    <script>
+        document.getElementById("submit-button").addEventListener("click", function () {
+            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
+            const synth = window.speechSynthesis;
+
+            Array.from(contentsToTranslate).forEach(content => {
+                const textInput = content.textContent;
+                const sentences = textInput.split(/[.|?|!]\s*/);
+
+                sentences.forEach(sentence => {
+                    const utterThis = new SpeechSynthesisUtterance(sentence);
+                    synth.speak(utterThis);
+                });
+            });
+        });
+                                    </script>
+
+                                    <script>
+        // Function to translate content
+        function translateContent(targetLanguage) {
+            const apiKey = 'AIzaSyDjM7iOXyQSsPDTAFQjeU3i6Rxb-njgEtw';
+            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
+
+            const translations = [];
+
+            Array.from(contentsToTranslate).forEach(content => {
+                const textToTranslate = {
+                    q: content.getAttribute('original-text'),
+                    source: 'en', // Source language (English)
+                    target: targetLanguage // Target language
+                };
+
+                fetch(`https://translation.googleapis.com/language/translate/v2?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(textToTranslate)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        translations.push({ element: content, translation: data.data.translations[0].translatedText });
+
+                        // Check if all translations are done
+                        if (translations.length === contentsToTranslate.length) {
+                            // Update content elements with translations
+                            translations.forEach(item => {
+                                item.element.innerText = item.translation;
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error translating content:', error);
+                    });
+            });
+        }
+
+        // Detect user's language preference or default to English
+        const userLanguage = navigator.language.split('-')[0];
+        const defaultLanguage = 'en';
+        const selectedLanguage = userLanguage || defaultLanguage;
+        translateContent(selectedLanguage);
+
+        // Event listener for language selection dropdown
+        document.getElementById('languageSelector').addEventListener('change', function () {
+            const targetLanguage = this.value;
+
+            convertToEnglish();
+
+            if (targetLanguage != 'en') {
+                translateContent(targetLanguage);
+            }
+
+        });
+
+
+        function convertToEnglish() {
+            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
+            Array.from(contentsToTranslate).forEach(content => {
+                console.log(content.innerHTML);
+                content.innerHTML = content.getAttribute('original-text');
+                console.log(content.value);
+            });
+        }
+                                    </script>
+
                                     <li background-color="rgb(0,84,76)">
                                         <select id="languageSelector">
                                             <option value="en">English</option>

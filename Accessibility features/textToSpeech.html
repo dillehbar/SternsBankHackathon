@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>JavaScript Text-to-Speech App</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div class="wrapper">
+        <h1>JavaScript Text-to-Speech App</h1>
+        <!-- Example content to be read -->
+        <div class="itemToTranslate">
+            <p>This is an example sentence. Another sentence follows.</p>
+            <p>This is a second paragraph. It contains more text to be read.</p>
+        </div>
+        <button type="submit" id="submit-button">Read the Screen</button>
+    </div>
+    <script>
+        document.getElementById("submit-button").addEventListener("click", function () {
+            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
+            const synth = window.speechSynthesis;
+
+            Array.from(contentsToTranslate).forEach(content => {
+                const textInput = content.textContent;
+                const sentences = textInput.split(/[.|?|!]\s*/);
+
+                sentences.forEach(sentence => {
+                    const utterThis = new SpeechSynthesisUtterance(sentence);
+                    synth.speak(utterThis);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
