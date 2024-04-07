@@ -6,6 +6,13 @@
     <title>My Website</title>
 </head>
 <body>
+
+    <script>
+        const contentsToTranslate;
+        const apiKey;
+
+
+    </script>
     <h1 id="title">Welcome to My Website</h1>
     <p class="itemToTranslate" original-text="This is some sample content 1.">This is some sample content 1.</p>
     <p class="itemToTranslate" original-text="This is some sample content 2.">This is some sample content 2.</p>
@@ -22,8 +29,8 @@
     <script>
         // Function to translate content
         function translateContent(targetLanguage) {
-            const apiKey = 'AIzaSyDjM7iOXyQSsPDTAFQjeU3i6Rxb-njgEtw';
-            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
+            apiKey = 'AIzaSyDjM7iOXyQSsPDTAFQjeU3i6Rxb-njgEtw';
+            contentsToTranslate = document.getElementsByClassName('itemToTranslate');
 
             const translations = [];
 
@@ -79,7 +86,7 @@
 
 
         function convertToEnglish() {
-            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
+            contentsToTranslate = document.getElementsByClassName('itemToTranslate');
             Array.from(contentsToTranslate).forEach(content => {
                 console.log(content.innerHTML);
                 content.innerHTML = content.getAttribute('original-text');

@@ -328,13 +328,95 @@
 
                                     <button type="submit" id="submit-button">Read the Screen</button>
 
+
+
+
+
+                                    <li background-color="rgb(0,84,76)">
+                                        <select id="languageSelector">
+                                            <option value="en">English</option>
+                                            <option value="es">Spanish</option>
+                                            <option value="so">Somila</option>
+                                            <!-- Add more options for other languages as needed -->
+                                        </select>
+                                    </li>
+
+
+                                    <script>
+        function translateContent(targetLanguage) {
+            const apiKey = 'AIzaSyDjM7iOXyQSsPDTAFQjeU3i6Rxb-njgEtw';
+            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
+
+            const translations = [];
+
+            Array.from(contentsToTranslate).forEach(content => {
+                const textToTranslate = {
+                    q: content.getAttribute('original-text'),
+                    source: 'en', // Source language (English)
+                    target: targetLanguage // Target language
+                };
+
+                fetch(`https://translation.googleapis.com/language/translate/v2?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(textToTranslate)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        translations.push({ element: content, translation: data.data.translations[0].translatedText });
+
+                        // Check if all translations are done
+                        if (translations.length === contentsToTranslate.length) {
+                            // Update content elements with translations
+                            translations.forEach(item => {
+                                item.element.innerText = item.translation;
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error translating content:', error);
+                    });
+            });
+        }
+
+        // Detect user's language preference or default to English
+        const userLanguage = navigator.language.split('-')[0];
+        const defaultLanguage = 'en';
+        const selectedLanguage = userLanguage || defaultLanguage;
+        translateContent(selectedLanguage);
+
+        // Event listener for language selection dropdown
+        document.getElementById('languageSelector').addEventListener('change', function () {
+            const targetLanguage = this.value;
+
+            convertToEnglish();
+
+            if (targetLanguage != 'en') {
+                translateContent(targetLanguage);
+            }
+
+        });
+
+
+        function convertToEnglish() {
+            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
+            Array.from(contentsToTranslate).forEach(content => {
+                console.log(content.innerHTML);
+                content.innerHTML = content.getAttribute('original-text');
+                console.log(content.value);
+            });
+        }
+                                    </script>
+
                                     <script>
         let clicked = false;
         const synth = window.speechSynthesis;
 
         document.getElementById("submit-button").addEventListener("click", function () {
 
-            
+
             if (!clicked) {
                 clicked = true;
                 const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
@@ -350,166 +432,17 @@
                     });
                 });
 
-                
-               
+
+
             } else {
                 synth.cancel();
                 clicked = false
-                
 
-            }
-            
-        });
-                                    </script>
 
-                                    <script>
-        // Function to translate content
-        function translateContent(targetLanguage) {
-            const apiKey = 'AIzaSyDjM7iOXyQSsPDTAFQjeU3i6Rxb-njgEtw';
-            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
-
-            const translations = [];
-
-            Array.from(contentsToTranslate).forEach(content => {
-                const textToTranslate = {
-                    q: content.getAttribute('original-text'),
-                    source: 'en', // Source language (English)
-                    target: targetLanguage // Target language
-                };
-
-                fetch(`https://translation.googleapis.com/language/translate/v2?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(textToTranslate)
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        translations.push({ element: content, translation: data.data.translations[0].translatedText });
-
-                        // Check if all translations are done
-                        if (translations.length === contentsToTranslate.length) {
-                            // Update content elements with translations
-                            translations.forEach(item => {
-                                item.element.innerText = item.translation;
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error translating content:', error);
-                    });
-            });
-        }
-
-        // Detect user's language preference or default to English
-        const userLanguage = navigator.language.split('-')[0];
-        const defaultLanguage = 'en';
-        const selectedLanguage = userLanguage || defaultLanguage;
-        translateContent(selectedLanguage);
-
-        // Event listener for language selection dropdown
-        document.getElementById('languageSelector').addEventListener('change', function () {
-            const targetLanguage = this.value;
-
-            convertToEnglish();
-
-            if (targetLanguage != 'en') {
-                translateContent(targetLanguage);
             }
 
         });
-
-
-        function convertToEnglish() {
-            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
-            Array.from(contentsToTranslate).forEach(content => {
-                console.log(content.innerHTML);
-                content.innerHTML = content.getAttribute('original-text');
-                console.log(content.value);
-            });
-        }
                                     </script>
-
-                                    <li background-color="rgb(0,84,76)">
-                                        <select id="languageSelector">
-                                            <option value="en">English</option>
-                                            <option value="es">Spanish</option>
-                                            <option value="so">Somila</option>
-                                            <!-- Add more options for other languages as needed -->
-                                        </select>
-                                    </li>
-
-                                    <script>
-                                             // Function to translate content
-        function translateContent(targetLanguage) {
-            const apiKey = 'AIzaSyDjM7iOXyQSsPDTAFQjeU3i6Rxb-njgEtw';
-            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
-
-            const translations = [];
-
-            Array.from(contentsToTranslate).forEach(content => {
-                const textToTranslate = {
-                    q: content.getAttribute('original-text'),
-                    source: 'en', // Source language (English)
-                    target: targetLanguage // Target language
-                };
-
-                fetch(`https://translation.googleapis.com/language/translate/v2?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(textToTranslate)
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        translations.push({ element: content, translation: data.data.translations[0].translatedText });
-
-                        // Check if all translations are done
-                        if (translations.length === contentsToTranslate.length) {
-                            // Update content elements with translations
-                            translations.forEach(item => {
-                                item.element.innerText = item.translation;
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error translating content:', error);
-                    });
-            });
-        }
-
-        // Detect user's language preference or default to English
-        const userLanguage = navigator.language.split('-')[0];
-        const defaultLanguage = 'en';
-        const selectedLanguage = userLanguage || defaultLanguage;
-        translateContent(selectedLanguage);
-
-        // Event listener for language selection dropdown
-        document.getElementById('languageSelector').addEventListener('change', function () {
-            const targetLanguage = this.value;
-
-            convertToEnglish();
-
-            if (targetLanguage != 'en') {
-                translateContent(targetLanguage);
-            }
-
-        });
-
-
-        function convertToEnglish() {
-            const contentsToTranslate = document.getElementsByClassName('itemToTranslate');
-            Array.from(contentsToTranslate).forEach(content => {
-                console.log(content.innerHTML);
-                content.innerHTML = content.getAttribute('original-text');
-                console.log(content.value);
-            });
-        }
-
-                                    </script>
-
 
                                     <li class="level-1">
                                         <a class="itemToTranslate" original-text="Blog" href="https://www.stearnsbank.com/resources/blog">Blog</a>
